@@ -1,0 +1,20 @@
+version: '3.1'
+services:
+ indico-postgres:
+    image: postgres:13.11-bullseye
+    container_name: d-postgres
+    networks:
+      - postgresnet
+    environment:
+      - POSTGRES_USER=indico
+      - POSTGRES_PASSWORD=indicopass
+      - POSTGRES_DATABASE=indico
+      - POSTGRES_DB=indico
+      - POSTGRES_ADMIN_PASSWORD=indicopass
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./data:/var/lib/postgresql/data
+networks:
+  postgresnet:
+    external: true

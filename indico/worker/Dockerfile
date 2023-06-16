@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.9.0
 
 ENV INDICO_VIRTUALENV="/opt/indico/.venv" INDICO_CONFIG="/opt/indico/etc/indico.conf"
 
@@ -17,7 +17,8 @@ RUN set -ex && \
 
 RUN ["/bin/bash", "-c", "mkdir -p --mode=775 /opt/indico/{etc,tmp,log,cache,archive}"]
 
-RUN virtualenv ${INDICO_VIRTUALENV}
+# RUN virtualenv ${INDICO_VIRTUALENV}
+RUN python -m venv ${INDICO_VIRTUALENV}
 
 RUN ${pip} install --upgrade pip setuptools && \
     ${pip} install uwsgi raven
@@ -29,6 +30,7 @@ RUN if [ "$tag" = "latest" ]; then \
 else \
     ${pip} install indico==${tag}; \
 fi;
+RUN ${pip} install indico-plugins
 
 RUN ${INDICO_VIRTUALENV}/bin/indico setup create-symlinks /opt/indico
 RUN ${INDICO_VIRTUALENV}/bin/indico setup create-logging-config /opt/indico/etc

@@ -1,7 +1,8 @@
 version: "2"
 services:
   indico-web: &indico-web
-    image: getindico/indico:latest
+    image: indico-cnea
+    # image: getindico/indico:latest
     command: /opt/indico/run_indico.sh
     depends_on:
       - indico-redis
@@ -11,6 +12,7 @@ services:
     networks:
       - backend
       - frontend
+      - postgresnet
     env_file:
       - indico.env
     volumes:
@@ -18,6 +20,7 @@ services:
       - './data/log/nginx:/opt/indico/log/nginx'
       - 'customization:/opt/indico/custom'
       - 'static-files:/opt/indico/static'
+      - './indico/worker/run_indico.sh:/opt/indico/run_indico.sh'
     tmpfs:
       - /opt/indico/tmp
   indico-static:
@@ -28,27 +31,29 @@ services:
     <<: *indico-web
     networks:
       - backend
+      - postgresnet
     depends_on:
       - indico-redis
     command: /opt/indico/run_celery.sh
     ports: []
     volumes:
       - 'archive:/opt/indico/archive'
+      - './indico/worker/run_celery.sh:/opt/indico/run_celery.sh'
   indico-redis:
     image: redis
     networks:
       - backend
     volumes:
       - './data/redis:/data'
-  indico-postgres:
-    image: centos/postgresql-96-centos7
-    networks:
-      - backend
-    environment:
-      - POSTGRESQL_USER=indico
-      - POSTGRESQL_PASSWORD=indicopass
-      - POSTGRESQL_DATABASE=indico
-      - POSTGRESQL_ADMIN_PASSWORD=indicopass
+#  indico-postgres:
+#    image: centos/postgresql-96-centos7
+#    networks:
+#      - backend
+ #   environment:
+ #     - POSTGRESQL_USER=indico
+  #    - POSTGRESQL_PASSWORD=indicopass
+  #    - POSTGRESQL_DATABASE=indico
+  #    - POSTGRESQL_ADMIN_PASSWORD=indicopass
   indico-nginx:
     build: nginx
     networks:
@@ -66,3 +71,5 @@ volumes:
 networks:
   backend: {}
   frontend: {}
+  postgresnet:
+    external: true
