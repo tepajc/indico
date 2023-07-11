@@ -22,19 +22,12 @@ services:
       # Indico is accessible either via nginx (localhost:8080 by default), or
       # directly via localhost:9090. In that case, static assets are served by flask
       - "9090:59999"
-      # Maildump is accessible at localhost:60000
-      - "60000:60000"
     volumes:
       - 'archive:/opt/indico/archive' # file storage
       - 'customization:/opt/indico/custom'
       - 'static-files:/opt/indico/static'
       - './data/indico/log:/opt/indico/log' # logs
-      - type: bind
-        source: ${INDICO_CONFIG}
-        target: /opt/indico/etc/indico.conf
-        read_only: true
-    tmpfs:
-      - /opt/indico/tmp
+      - './indico.conf:/opt/indico/etc/indico.conf'
   # Indico celery
   indico-celery:
     <<: *indico-web

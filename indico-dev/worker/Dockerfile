@@ -13,9 +13,9 @@ RUN set -ex && apk update && \
     # gcc, g++, make, musl-dev, linux-headers, mupdf-dev and freetype-dev are needed to build some python and/or node libraries
 
 # Install maildump
-RUN pip install --no-cache-dir pipx && \
-    pipx install maildump && \
-    pip uninstall pipx -y
+#RUN pip install --no-cache-dir pipx && \
+#    pipx install maildump && \
+#    pip uninstall pipx -y
 
 # Create a virtual environment
 RUN python -m venv ${INDICO_VIRTUALENV}
@@ -53,7 +53,9 @@ COPY .transifexrc /opt/indico/etc/
 WORKDIR /opt/indico
 
 # uwsgi & maildump ports
-EXPOSE 59999 60000
+#EXPOSE 59999 60000
+EXPOSE 59999
+
 
 COPY uwsgi.ini /etc/uwsgi.ini
 
