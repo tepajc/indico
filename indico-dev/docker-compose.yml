@@ -23,11 +23,15 @@ services:
       # directly via localhost:9090. In that case, static assets are served by flask
       - "9090:59999"
     volumes:
-      - 'archive:/opt/indico/archive' # file storage
-      - 'customization:/opt/indico/custom'
-      - 'static-files:/opt/indico/static'
+      - './archive:/opt/indico/archive' # file storage
+      - './customization:/opt/indico/custom'
+      - './static-files:/opt/indico/static'
       - './data/indico/log:/opt/indico/log' # logs
       - './indico.conf:/opt/indico/etc/indico.conf'
+      ##
+      - './worker/run_indico.sh:/opt/indico/run_indico.sh'
+      # - './worker/indico.conf:/opt/indico/etc/indico.conf'
+
   # Indico celery
   indico-celery:
     <<: *indico-web

@@ -31,8 +31,8 @@ echo 'Compiling translations...'
 indico i18n compile-catalog
 indico i18n compile-catalog-react
 
-echo 'Starting maildump...'
-/root/.local/bin/maildump -n --http-ip 0.0.0.0 --http-port 60000 --db /tmp/maildump.sqlite --smtp-ip 127.0.0.1 --smtp-port 25 &
+# echo 'Starting maildump...'
+# /root/.local/bin/maildump -n --http-ip 0.0.0.0 --http-port 60000 --db /tmp/maildump.sqlite --smtp-ip 127.0.0.1 --smtp-port 25 &
 
 echo 'Starting Indico...'
 uwsgi /etc/uwsgi.ini
